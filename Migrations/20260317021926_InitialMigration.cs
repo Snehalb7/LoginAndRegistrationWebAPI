@@ -23,7 +23,7 @@ namespace LoginAndRegistrationWebAPI.Migrations
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },   0110
+                },   
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
