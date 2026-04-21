@@ -4,7 +4,7 @@ namespace LoginAndRegistrationWebAPI.Filters
 {
     public class ResultFilter:ResultFilterAttribute
     {
-        pubilc override void OnResultExecuting(ResultExecutingContext context)
+        public override void OnResultExecuting(ResultExecutingContext context)
         {
             // base.OnResultExecuting(context);
             Console.WriteLine("Before executing action result...");
