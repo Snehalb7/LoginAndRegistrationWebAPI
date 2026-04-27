@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using LoginAndRegistrationWebAPI.Extensions;
 
 namespace LoginAndRegistrationWebAPI.Controllers
 {
@@ -18,7 +19,7 @@ namespace LoginAndRegistrationWebAPI.Controllers
     {
         private readonly MyDbContext dbContext;
         private readonly IConfiguration _configuration;
-        public UserController(MyDbContext dbContext,IConfiguration configuration)
+        public UserController(MyDbContext dbContext, IConfiguration configuration)
         {
             this.dbContext = dbContext;
             _configuration = configuration;
@@ -55,7 +56,7 @@ namespace LoginAndRegistrationWebAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
-        
+
         public IActionResult Login(LoginDTO LoginDTO)
         {
 
@@ -69,7 +70,7 @@ namespace LoginAndRegistrationWebAPI.Controllers
                     new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                     new Claim("UserId",user.UserId.ToString()),
                     new Claim("Email",user.Email.ToString())
-                    
+
 
                 };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -83,7 +84,7 @@ namespace LoginAndRegistrationWebAPI.Controllers
                     );
 
                 string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                return Ok(new {Token=tokenString,User=user });
+                return Ok(new { Token = tokenString, User = user });
 
                 //return Ok(user);
             }
@@ -182,5 +183,33 @@ namespace LoginAndRegistrationWebAPI.Controllers
             }
 
         }
+
+        //LINQ Example
+        [HttpGet]
+        [Route("GetUserName")]
+        public IActionResult GetUserName(string name)
+        {
+            var user = dbContext.Users.First(x => x.Firstrname == name);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            else
+            {
+                return NotFound("User not found");
+            }
+        }
+
+        //Extension Method Example
+        [HttpPost]
+        [Route("ValidateEmail")]
+        public IActionResult ValidateEmail(string email)
+        {   
+                if(!email.IsValidEmail())
+                return BadRequest("Invalid email");
+            return Ok("Valid email");
+           
+        }
     }
 }
+
